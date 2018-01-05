@@ -1,6 +1,16 @@
 %{
-#include "jso.tab.h"
+#include <stdio.h>
 #include <string.h>
+
+void print_double(double val)
+{
+  fprintf(stdout, "%lf", val);
+}
+
+void print_itself(char * val)
+{
+  fprintf(stdout, "%s", val);
+}
 %}
 
 unicode     \\u[0-9A-Fa-f]{4}
@@ -23,41 +33,50 @@ sqKey       {sqString}/[ \t]*:
 
 %%
 {dqString}|{sqString} {
+  fprintf(stdout, "%s", yytext);
   yytext[yyleng-1] = '\0';
   yylval.string_head = &yytext[1];
+  /* yylval.string_head = "dummy"; */
   return STRING;
 };
 
 {octalOld} {
-  int temp;
+  unsigned long int temp;
   sscanf(yytext+1, "%lo", &temp);
+  print_double(temp);
   yylval.double_value = (double)temp;
+  /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
 
 {octalNew} {
   unsigned long int temp;
   sscanf(yytext+2, "%lo", &temp);
+  print_double(temp);
   yylval.double_value = (double)temp;
+  /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
 
 {hexadecimal} {
   unsigned long int temp;
   sscanf(yytext+2, "%lx", &temp);
+  print_double(temp);
   yylval.double_value = (double)temp;
+  /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
 
 {binary} {
   unsigned long int temp = 0;
   for (int i = 2; i < yyleng; i++) {
-    temp << 1;
-    if (yytext[i] == '1') {
-      temp &= 0x01;
-    }
+  temp <<= 1;
+  if (yytext[i] == '1') {
+  temp &= 0x01;
   }
-  yylval.double_value = (double)temp;
+  }
+  print_double(temp);
+  /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
 
@@ -65,19 +84,20 @@ sqKey       {sqString}/[ \t]*:
   double temp;
   sscanf(yytext, "%lf", &temp);
   yylval.double_value = temp;
+  /* yylval.double_value = 0.0; */
+  print_itself(yytext);
   return DOUBLE;
 };
+true     { print_itself(yytext); return TRUE; };
+false    { print_itself(yytext); return FALSE; };
+null     { print_itself(yytext); return NUL; };
 
-true                    return TRUE;
-false                   return FALSE;
-null                    return NUL;
-
-[\[\]{},:]              return yytext[0];
-
-[ \t\n] ;
+[\[\]{},:]  { fprintf(stdout, "%c", yytext[0]); return yytext[0]; };
+[ \t\n]+ { fprintf(stdout, "%c", yytext[0]);; };
 
 . {
   fprintf(stderr, "lexical error.\n");
-  exit(1)
+  exit(1);
 }
 %%
+
