@@ -23,7 +23,8 @@ sqKey       {sqString}/[ \t]*:
 
 %%
 {dqString}|{sqString} {
-  /* TODO */
+  yytext[yyleng-1] = '\0';
+  yylval.string_head = &yytext[1];
   return STRING;
 };
 
