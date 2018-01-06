@@ -41,11 +41,10 @@ value : object
 
 object : '{' '}'
        | '{' pairs '}'
+       | '{' pairs ',' '}'
        ;
 
-pairs  : pairs ',' pair ','
-       | pair ','
-       | pairs ',' pair
+pairs  : pairs ',' pair
        | pair
        ;
 
@@ -54,10 +53,10 @@ pair   : STRING ':' value
 
 array  : '[' ']'
        | '[' values ']'
+       | '[' values ',' ']'
        ;
 
-values : values ',' value ','
-       | values ',' value
+values : values ',' value
        | value
        ;
 %%
