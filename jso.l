@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+void eat_comment(void);
+
 void print_double(double val)
 {
   fprintf(stdout, "%lf", val);
@@ -21,6 +23,7 @@ void print_char(char val)
 {
   fprintf(stdout, "%c", val);
 }
+
 %}
 
 unicode     \\u[0-9A-Fa-f]{4}
@@ -43,6 +46,17 @@ extendedKey ([0-9]+|([^{marks}{white}]|{unicode}|{latin18}|{latin116})+)
 strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 
 %%
+"/*"       {
+  print_itself(yytext);
+  eat_comment();
+  /* no return for block comment */
+};
+
+"//"[^\n]* {
+  print_itself(yytext);
+  /* no return for inline comment */
+};
+
 {octalOld} {
   unsigned long int temp;
   sscanf(yytext+1, "%lo", &temp);
@@ -121,3 +135,17 @@ null     { print_itself(yytext); return NUL; };
 }
 %%
 
+void eat_comment(void)
+{
+  char c, prev = 0;
+
+  while ((c = input()) != 0)
+  {
+    print_char(c);
+    if (c == '/' && prev == '*') {
+      return;
+    }
+    prev = c;
+  }
+  fprintf(stderr, "lexical error: unterminated comment\n");
+}
