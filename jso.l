@@ -7,9 +7,19 @@ void print_double(double val)
   fprintf(stdout, "%lf", val);
 }
 
-void print_itself(char * val)
+void print_itself(const char * val)
 {
   fprintf(stdout, "%s", val);
+}
+
+void print_int(int val)
+{
+  fprintf(stdout, "%d", val);
+}
+
+void print_char(char val)
+{
+  fprintf(stdout, "%c", val);
 }
 %}
 
@@ -33,7 +43,7 @@ sqKey       {sqString}/[ \t]*:
 
 %%
 {dqString}|{sqString} {
-  fprintf(stdout, "%s", yytext);
+  print_itself(yytext);
   yytext[yyleng-1] = '\0';
   yylval.string_head = &yytext[1];
   /* yylval.string_head = "dummy"; */
@@ -43,7 +53,7 @@ sqKey       {sqString}/[ \t]*:
 {octalOld} {
   unsigned long int temp;
   sscanf(yytext+1, "%lo", &temp);
-  print_double(temp);
+  print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -52,7 +62,7 @@ sqKey       {sqString}/[ \t]*:
 {octalNew} {
   unsigned long int temp;
   sscanf(yytext+2, "%lo", &temp);
-  print_double(temp);
+  print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -61,7 +71,7 @@ sqKey       {sqString}/[ \t]*:
 {hexadecimal} {
   unsigned long int temp;
   sscanf(yytext+2, "%lx", &temp);
-  print_double(temp);
+  print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -75,7 +85,7 @@ sqKey       {sqString}/[ \t]*:
   temp &= 0x01;
   }
   }
-  print_double(temp);
+  print_int(temp);
   /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
@@ -92,8 +102,8 @@ true     { print_itself(yytext); return TRUE; };
 false    { print_itself(yytext); return FALSE; };
 null     { print_itself(yytext); return NUL; };
 
-[\[\]{},:]  { fprintf(stdout, "%c", yytext[0]); return yytext[0]; };
-[ \t\n]+ { fprintf(stdout, "%c", yytext[0]);; };
+[\[\]{},:]  { print_char(yytext[0]); return yytext[0]; };
+[ \t\n]     { print_char(yytext[0]); };
 
 . {
   fprintf(stderr, "lexical error.\n");
