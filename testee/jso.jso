@@ -1,0 +1,9 @@
+{
+  "asdf"   : "qwer",
+  "array"  : [ 1, true, false, "zxcv", ],
+  "object" : { "1": 1, "true": true, "false": false, "zxcv": "zxcv", },
+  "true"   : true,
+  "false"  : false,
+  "null"   : null,
+}
+
