@@ -18,11 +18,13 @@ static int yywrap(void)
 %}
 
 %union {
-  double double_value;
+  char * key_head;
   char * string_head;
+  double double_value;
 }
 
-%token <string_head> STRING
+%token <key_head>     KEY
+%token <string_head>  STRING
 %token <double_value> DOUBLE
 %token TRUE FALSE NUL
 
@@ -49,6 +51,7 @@ pairs  : pairs ',' pair
        ;
 
 pair   : STRING ':' value
+       | KEY    ':' value
        ;
 
 array  : '[' ']'

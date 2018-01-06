@@ -37,19 +37,12 @@ octalNew    0(o|O)[0-7]+
 hexadecimal 0(x|X)[0-9A-Fa-f]+
 binary      0(b|B)[0-1]+
 
-key         ([0-9]+|([_a-zA-Z][_a-zA-Z0-9]+))/[ \t]*:
-dqKey       {dqString}/[ \t]*:
-sqKey       {sqString}/[ \t]*:
+white       ' \t\n'
+marks       '\"\'\\\[\]{},\.:;!#\$%&\(\)\-=~^\|`@\*\+_\?><'
+extendedKey ([0-9]+|([^{marks}{white}]|{unicode}|{latin18}|{latin116})+)
+strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 
 %%
-{dqString}|{sqString} {
-  print_itself(yytext);
-  yytext[yyleng-1] = '\0';
-  yylval.string_head = &yytext[1];
-  /* yylval.string_head = "dummy"; */
-  return STRING;
-};
-
 {octalOld} {
   unsigned long int temp;
   sscanf(yytext+1, "%lo", &temp);
@@ -98,9 +91,26 @@ sqKey       {sqString}/[ \t]*:
   print_itself(yytext);
   return DOUBLE;
 };
+
 true     { print_itself(yytext); return TRUE; };
 false    { print_itself(yytext); return FALSE; };
 null     { print_itself(yytext); return NUL; };
+
+{dqString}|{sqString} {
+  print_itself(yytext);
+  yytext[yyleng-1] = '\0';
+  yylval.string_head = &yytext[1];
+  /* yylval.string_head = "dummy"; */
+  return STRING;
+};
+
+{strictKey} {
+  print_itself(yytext);
+  yylval.string_head = yytext;
+  /* yylval.string_head = "dummy"; */
+  return KEY;
+}
+
 
 [\[\]{},:]  { print_char(yytext[0]); return yytext[0]; };
 [ \t\n]     { print_char(yytext[0]); };
