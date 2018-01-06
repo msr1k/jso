@@ -12,9 +12,9 @@ void print_itself(const char * val)
   fprintf(stdout, "%s", val);
 }
 
-void print_int(int val)
+void print_int(long int val)
 {
-  fprintf(stdout, "%d", val);
+  fprintf(stdout, "%ld", val);
 }
 
 void print_char(char val)
@@ -60,7 +60,7 @@ sqKey       {sqString}/[ \t]*:
 };
 
 {octalNew} {
-  unsigned long int temp;
+  long int temp;
   sscanf(yytext+2, "%lo", &temp);
   print_int(temp);
   yylval.double_value = (double)temp;
@@ -69,7 +69,7 @@ sqKey       {sqString}/[ \t]*:
 };
 
 {hexadecimal} {
-  unsigned long int temp;
+  long int temp;
   sscanf(yytext+2, "%lx", &temp);
   print_int(temp);
   yylval.double_value = (double)temp;
@@ -78,7 +78,7 @@ sqKey       {sqString}/[ \t]*:
 };
 
 {binary} {
-  unsigned long int temp = 0;
+  long int temp = 0;
   for (int i = 2; i < yyleng; i++) {
   temp <<= 1;
   if (yytext[i] == '1') {

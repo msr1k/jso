@@ -27,17 +27,17 @@ static int yywrap(void)
 %token TRUE FALSE NUL
 
 %%
-jso : value
-    ;
+jso    : value
+       ;
 
-value : object
-      | array
-      | STRING
-      | DOUBLE
-      | TRUE
-      | FALSE
-      | NUL
-      ;
+value  : object
+       | array
+       | STRING
+       | DOUBLE
+       | TRUE
+       | FALSE
+       | NUL
+       ;
 
 object : '{' '}'
        | '{' pairs '}'
