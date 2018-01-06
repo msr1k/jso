@@ -87,10 +87,10 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 {binary} {
   long int temp = 0;
   for (int i = 2; i < yyleng; i++) {
-  temp <<= 1;
-  if (yytext[i] == '1') {
-  temp &= 0x01;
-  }
+    temp <<= 1;
+    if (yytext[i] == '1') {
+      temp |= 0x01;
+    }
   }
   print_int(temp);
   /* yylval.double_value = 0.0; */
