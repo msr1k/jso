@@ -4,25 +4,34 @@
 
 void eat_comment(void);
 
-void print_double(double val)
+#define DEBUG
+
+#ifdef DEBUG
+void debug_print_double(double val)
 {
   fprintf(stdout, "%lf", val);
 }
 
-void print_itself(const char * val)
+void debug_print_itself(const char * val)
 {
   fprintf(stdout, "%s", val);
 }
 
-void print_int(long int val)
+void debug_print_int(long int val)
 {
   fprintf(stdout, "%ld", val);
 }
 
-void print_char(char val)
+void debug_print_char(char val)
 {
   fprintf(stdout, "%c", val);
 }
+#else
+#  define debug_print_double(x)
+#  define debug_print_itself(x)
+#  define debug_print_int(x)
+#  define debug_print_char(x)
+#endif
 
 %}
 
@@ -47,20 +56,20 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 
 %%
 "/*"       {
-  print_itself(yytext);
+  debug_print_itself(yytext);
   eat_comment();
   /* no return for block comment */
 };
 
 "//"[^\n]* {
-  print_itself(yytext);
+  debug_print_itself(yytext);
   /* no return for inline comment */
 };
 
 {octalOld} {
   unsigned long int temp;
   sscanf(yytext+1, "%lo", &temp);
-  print_int(temp);
+  debug_print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -69,7 +78,7 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 {octalNew} {
   long int temp;
   sscanf(yytext+2, "%lo", &temp);
-  print_int(temp);
+  debug_print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -78,7 +87,7 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 {hexadecimal} {
   long int temp;
   sscanf(yytext+2, "%lx", &temp);
-  print_int(temp);
+  debug_print_int(temp);
   yylval.double_value = (double)temp;
   /* yylval.double_value = 0.0; */
   return DOUBLE;
@@ -92,7 +101,7 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
       temp |= 0x01;
     }
   }
-  print_int(temp);
+  debug_print_int(temp);
   /* yylval.double_value = 0.0; */
   return DOUBLE;
 };
@@ -102,16 +111,16 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
   sscanf(yytext, "%lf", &temp);
   yylval.double_value = temp;
   /* yylval.double_value = 0.0; */
-  print_itself(yytext);
+  debug_print_itself(yytext);
   return DOUBLE;
 };
 
-true     { print_itself(yytext); return TRUE; };
-false    { print_itself(yytext); return FALSE; };
-null     { print_itself(yytext); return NUL; };
+true     { debug_print_itself(yytext); return TRUE; };
+false    { debug_print_itself(yytext); return FALSE; };
+null     { debug_print_itself(yytext); return NUL; };
 
 {dqString}|{sqString} {
-  print_itself(yytext);
+  debug_print_itself(yytext);
   yytext[yyleng-1] = '\0';
   yylval.string_head = &yytext[1];
   /* yylval.string_head = "dummy"; */
@@ -119,15 +128,15 @@ null     { print_itself(yytext); return NUL; };
 };
 
 {strictKey} {
-  print_itself(yytext);
+  debug_print_itself(yytext);
   yylval.string_head = yytext;
   /* yylval.string_head = "dummy"; */
   return KEY;
 }
 
 
-[\[\]{},:]  { print_char(yytext[0]); return yytext[0]; };
-[ \t\n]     { print_char(yytext[0]); };
+[\[\]{},:]  { debug_print_char(yytext[0]); return yytext[0]; };
+[ \t\n]     { debug_print_char(yytext[0]); };
 
 . {
   fprintf(stderr, "lexical error.\n");
@@ -141,7 +150,7 @@ void eat_comment(void)
 
   while ((c = input()) != 0)
   {
-    print_char(c);
+    debug_print_char(c);
     if (c == '/' && prev == '*') {
       return;
     }
