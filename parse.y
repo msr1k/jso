@@ -41,9 +41,14 @@ value  : object
        | NUL
        ;
 
-object : '{' '}'
-       | '{' pairs '}'
-       | '{' pairs ',' '}'
+bs     : '{' {}
+       ;
+be     : '}' {}
+       ;
+
+object : bs be
+       | bs pairs be
+       | bs pairs ',' be
        ;
 
 pairs  : pairs ',' pair
@@ -54,9 +59,14 @@ pair   : STRING ':' value
        | KEY    ':' value
        ;
 
-array  : '[' ']'
-       | '[' values ']'
-       | '[' values ',' ']'
+ps     : '[' {}
+       ;
+pe     : ']' {}
+       ;
+
+array  : ps pe
+       | ps values pe
+       | ps values ',' pe
        ;
 
 values : values ',' value

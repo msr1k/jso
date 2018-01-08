@@ -35,6 +35,9 @@ void debug_print_char(char val)
 
 %}
 
+%option noyywrap
+%option yylineno
+
 unicode     \\u[0-9A-Fa-f]{4}
 latin116    \\x[0-9A-Fa-f]{2}
 latin18     \\[0-7]{1,3}
@@ -139,13 +142,14 @@ null     { debug_print_itself(yytext); return NUL; };
 [ \t\n]     { debug_print_char(yytext[0]); };
 
 . {
-  fprintf(stderr, "lexical error.\n");
+  fprintf(stderr, "lexical error (line %d)\n", yylineno);
   exit(1);
 }
 %%
 
 void eat_comment(void)
 {
+  int  start_line = yylineno;
   char c, prev = 0;
 
   while ((c = input()) != 0)
@@ -156,5 +160,6 @@ void eat_comment(void)
     }
     prev = c;
   }
-  fprintf(stderr, "lexical error: unterminated comment\n");
+  fprintf(stderr, "lexical error: unterminated comment (line %d-%d)\n", start_line, yylineno);
+  exit(1);
 }
