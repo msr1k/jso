@@ -74,7 +74,7 @@ values : values ',' value
        ;
 %%
 
-#include "lex.yy.c"
+#include "jso.lex.c"
 
 int main()
 {
