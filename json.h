@@ -24,22 +24,23 @@ struct JsoJsonPremitiveValue {
         long int i; // For JSO_JSON_INT and JSO_JSON_BOOL
         double d;   // For JSO_JSON_DOUBLE
         char* s;    // FOr JSO_JSON_STRING
-    } val;
+    } v;
 };
 
 struct JsoJsonHandle;
 
 struct JsoJsonHandle* JsoJsonCreate();
-int JsoJsonDestroy(struct JsoJsonHandle* h);
+void JsoJsonDestroy(struct JsoJsonHandle* h);
+
+JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonPremitiveValue* v);
+JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k);
+
+JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h);
+JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h);
+JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h);
+JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h);
+
 const char* JsoJsonGetJsonString(struct JsoJsonHandle* h);
-
-int JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonPremitiveValue* v);
-int JsoJsonAddKeyValue(struct JsoJsonHandle* h, const char* k, const JsoJsonPremitiveValue* v);
-
-int JsoJsonEnterArray(struct JsoJsonHandle* h);
-int JsoJsonLeaveArray(struct JsoJsonHandle* h);
-int JsoJsonEnterObject(struct JsoJsonHandle* h);
-int JsoJsonLeaveObject(struct JsoJsonHandle* h);
 
 #ifdef __cplusplus
 }
