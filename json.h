@@ -18,7 +18,7 @@ enum JsoJsonPremitiveType {
     JSO_JSON_NULL,
 };
 
-struct JsoJsonValue {
+struct JsoJsonPremitiveValue {
     JsoJsonPremitiveType type;
     union {
         long int i; // For JSO_JSON_INT and JSO_JSON_BOOL
@@ -33,8 +33,8 @@ struct JsoJsonHandle* JsoJsonCreate();
 int JsoJsonDestroy(struct JsoJsonHandle* h);
 const char* JsoJsonGetJsonString(struct JsoJsonHandle* h);
 
-int JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonValue* v);
-int JsoJsonAddKeyValue(struct JsoJsonHandle* h, const char* k, const JsoJsonValue* v);
+int JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonPremitiveValue* v);
+int JsoJsonAddKeyValue(struct JsoJsonHandle* h, const char* k, const JsoJsonPremitiveValue* v);
 
 int JsoJsonEnterArray(struct JsoJsonHandle* h);
 int JsoJsonLeaveArray(struct JsoJsonHandle* h);
