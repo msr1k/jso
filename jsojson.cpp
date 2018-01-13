@@ -137,7 +137,7 @@ JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const struct JsoJsonPremiti
     JsoJsonBool ret = JSO_JSON_TRUE;
 
     auto v = JsoJson::CreatePremitiveValue(pv);
-    auto latest = h->stack.back();
+    auto& latest = h->stack.back();
 
     if (latest->type() == JsoJson::Type::NONE) {
         // JSON which consists of only one premitive value
@@ -164,7 +164,7 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
 
     std::shared_ptr<JsoJson::value> v = h->stack.back();
     h->stack.pop_back();
-    auto parent = h->stack.back();
+    auto& parent = h->stack.back();
 
     if (parent->type() == JsoJson::Type::OBJECT) {
         auto o = JsoJson::cast<JsoJson::valueObject>(parent);
@@ -180,8 +180,10 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
 
 JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
 {
+    JsoJsonBool ret = JSO_JSON_TRUE;
+
     auto v = std::make_shared<JsoJson::valueArray>();
-    auto latest = h->stack.back();
+    auto& latest = h->stack.back();
 
     if (latest->type() == JsoJson::Type::NONE) {
         h->head = latest = v;
@@ -193,8 +195,11 @@ JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
         if (array) {
             array->v.emplace_back(v);
         }
+    } else {
+        ret = JSO_JSON_FALSE;
     }
-    return JSO_JSON_TRUE;
+
+    return ret;
 }
 
 JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h)
@@ -206,7 +211,7 @@ JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h)
 JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h)
 {
     auto v = std::make_shared<JsoJson::valueObject>();
-    auto latest = h->stack.back();
+    auto& latest = h->stack.back();
 
     if (latest->type() == JsoJson::Type::NONE) {
         h->head = latest = v;
@@ -219,6 +224,7 @@ JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h)
             array->v.emplace_back(v);
         }
     }
+
     return JSO_JSON_TRUE;
 }
 
