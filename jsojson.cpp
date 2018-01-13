@@ -76,7 +76,7 @@ std::shared_ptr<value> CreatePremitiveValue(const JsoJsonPremitiveValue* pv) {
         case JSO_JSON_INT:    return std::make_shared<valueInt>(pv->v.i);
         case JSO_JSON_DOUBLE: return std::make_shared<valueDouble>(pv->v.d);
         case JSO_JSON_STRING: return std::make_shared<valueString>(pv->v.s);
-        case JSO_JSON_BOOL:   return std::make_shared<valueBool>(pv->v.i ? true : false);
+        case JSO_JSON_BOOL:   return std::make_shared<valueBool>(pv->v.b ? true : false);
         case JSO_JSON_NULL:   return std::make_shared<valueNull>();
         default:              return nullptr;
     }

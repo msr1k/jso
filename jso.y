@@ -24,11 +24,13 @@ static int yywrap(void)
   char * key_head;
   char * string_head;
   double double_value;
+  long int int_value;
 }
 
 %token <key_head>     KEY
 %token <string_head>  STRING
 %token <double_value> DOUBLE
+%token <int_value>    INT
 %token TRUE FALSE NUL
 
 %%
@@ -45,7 +47,12 @@ value  : object
          v.v.b = JSO_JSON_TRUE;
          JsoJsonAddValue(h, &v);
        }
-       | FALSE
+       | FALSE {
+         struct JsoJsonPremitiveValue v;
+         v.type = JSO_JSON_BOOL;
+         v.v.b = JSO_JSON_FALSE;
+         JsoJsonAddValue(h, &v);
+       }
        | NUL
        ;
 

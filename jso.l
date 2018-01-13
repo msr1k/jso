@@ -69,30 +69,27 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
 };
 
 {octalOld} {
-  unsigned long int temp;
+  long int temp;
   sscanf(yytext+1, "%lo", &temp);
   debug_print_int(temp);
-  yylval.double_value = (double)temp;
-  /* yylval.double_value = 0.0; */
-  return DOUBLE;
+  yylval.int_value = temp;
+  return INT;
 };
 
 {octalNew} {
   long int temp;
   sscanf(yytext+2, "%lo", &temp);
   debug_print_int(temp);
-  yylval.double_value = (double)temp;
-  /* yylval.double_value = 0.0; */
-  return DOUBLE;
+  yylval.int_value = temp;
+  return INT;
 };
 
 {hexadecimal} {
   long int temp;
   sscanf(yytext+2, "%lx", &temp);
   debug_print_int(temp);
-  yylval.double_value = (double)temp;
-  /* yylval.double_value = 0.0; */
-  return DOUBLE;
+  yylval.int_value = temp;
+  return INT;
 };
 
 {binary} {
@@ -104,16 +101,15 @@ strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
     }
   }
   debug_print_int(temp);
-  /* yylval.double_value = 0.0; */
-  return DOUBLE;
+  yylval.int_value = temp;
+  return INT;
 };
 
 {double} {
   double temp;
   sscanf(yytext, "%lf", &temp);
-  yylval.double_value = temp;
-  /* yylval.double_value = 0.0; */
   debug_print_itself(yytext);
+  yylval.double_value = temp;
   return DOUBLE;
 };
 
