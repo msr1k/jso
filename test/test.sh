@@ -74,7 +74,17 @@ echo -n ">> "
 echo "{ \"asdf\": 1 }" | ../jso
 echo
 
-echo "{ \"asdf\": 1, qwer: 2.3 } must be {\"asdf\":1, "qwer": 2.3}"
+echo '{ "asdf": 1, qwer: 2.3 } must be {"asdf":1, "qwer": 2.3}'
 echo -n ">> "
-echo "{ \"asdf\": 1, qwer: 2.3}" | ../jso
+echo '{ "asdf": 1, qwer: 2.3}' | ../jso
+echo
+
+echo '[1,2,3,[4,5,6]] must be [1,2,3,[4,5,6]]'
+echo -n ">> "
+echo '[1,2,3,[4,5,6]]' | ../jso
+echo
+
+echo '{ "asdf": [1,2,3], "qwer": { "a": 2.3, "b": -987 } must be ...'
+echo -n ">> "
+echo '{"asdf": [1,2,3], "qwer": { "a": 2.3, "b": -987} }' | ../jso
 echo

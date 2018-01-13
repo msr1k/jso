@@ -92,7 +92,6 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
         const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
         std::cout << (b->v ? "true" : "false");
     } else if (v->type() == JsoJson::Type::NUL) {
-        const auto& i = JsoJson::cast<JsoJson::valueNull>(v);
         std::cout << "null" << std::endl;
     } else if (v->type() == JsoJson::Type::INT) {
         const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
@@ -207,10 +206,10 @@ JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
     } else if (latest->type() == JsoJson::Type::OBJECT) {
         h->stack.emplace_back(v);
     } else if (latest->type() == JsoJson::Type::ARRAY) {
+        auto a = JsoJson::cast<JsoJson::valueArray>(h->stack.back());
         h->stack.emplace_back(v);
-        auto array = JsoJson::cast<JsoJson::valueArray>(latest);
-        if (array) {
-            array->v.emplace_back(v);
+        if (a) {
+            a->v.emplace_back(v);
         }
     } else {
         ret = JSO_JSON_FALSE;
@@ -235,10 +234,10 @@ JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h)
     } else if (latest->type() == JsoJson::Type::OBJECT) {
         h->stack.emplace_back(v);
     } else if (latest->type() == JsoJson::Type::ARRAY) {
+        auto a = JsoJson::cast<JsoJson::valueArray>(h->stack.back());
         h->stack.emplace_back(v);
-        auto array = JsoJson::cast<JsoJson::valueArray>(latest);
-        if (array) {
-            array->v.emplace_back(v);
+        if (a) {
+            a->v.emplace_back(v);
         }
     }
 
