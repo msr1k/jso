@@ -40,7 +40,18 @@ jso    : value
 value  : object
        | array
        | STRING
-       | DOUBLE
+       | DOUBLE {
+         struct JsoJsonPremitiveValue v;
+         v.type = JSO_JSON_DOUBLE;
+         v.v.d = $1;
+         JsoJsonAddValue(h, &v);
+       }
+       | INT {
+         struct JsoJsonPremitiveValue v;
+         v.type = JSO_JSON_INT;
+         v.v.i = $1;
+         JsoJsonAddValue(h, &v);
+       }
        | TRUE   {
          struct JsoJsonPremitiveValue v;
          v.type = JSO_JSON_BOOL;

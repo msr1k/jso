@@ -204,8 +204,14 @@ const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
     if (h->head->type() == JsoJson::Type::BOOL) {
-        const auto& b = JsoJson::cast<JsoJson::valueBool>(h->head);
-        std::cout << (b->v ? "true" : "false") << std::endl;
+        const auto& v = JsoJson::cast<JsoJson::valueBool>(h->head);
+        std::cout << (v->v ? "true" : "false") << std::endl;
+    } else if (h->head->type() == JsoJson::Type::INT) {
+        const auto& v = JsoJson::cast<JsoJson::valueInt>(h->head);
+        std::cout << v->v << std::endl;
+    } else if (h->head->type() == JsoJson::Type::DOUBLE) {
+        const auto& v = JsoJson::cast<JsoJson::valueDouble>(h->head);
+        std::cout << v->v << std::endl;
     }
 
     return "";
