@@ -64,6 +64,11 @@ echo -n ">> "
 echo "[ \"asdf\" ]" | ../jso
 echo
 
+echo "[ \"asdf\", 1, true ] must be [\"asdf\", 1, true]"
+echo -n ">> "
+echo "[ \"asdf\", 1, true ]" | ../jso
+echo
+
 echo "{ \"asdf\": 1 } must be {\"asdf\":1}"
 echo -n ">> "
 echo "{ \"asdf\": 1 }" | ../jso

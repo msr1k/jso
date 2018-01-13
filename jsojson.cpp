@@ -90,26 +90,35 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
 {
     if (v->type() == JsoJson::Type::BOOL) {
         const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
-        std::cout << (b->v ? "true" : "false") << std::endl;
+        std::cout << (b->v ? "true" : "false");
     } else if (v->type() == JsoJson::Type::NUL) {
         const auto& i = JsoJson::cast<JsoJson::valueNull>(v);
         std::cout << "null" << std::endl;
     } else if (v->type() == JsoJson::Type::INT) {
         const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
-        std::cout << i->v << std::endl;
+        std::cout << i->v;
     } else if (v->type() == JsoJson::Type::DOUBLE) {
         const auto& d = JsoJson::cast<JsoJson::valueDouble>(v);
-        std::cout << d->v << std::endl;
+        std::cout << d->v;
     } else if (v->type() == JsoJson::Type::STRING) {
         const auto& s = JsoJson::cast<JsoJson::valueString>(v);
-        std::cout << '"' << s->v << '"' << std::endl;
+        std::cout << '"' << s->v << '"';
     } else if (v->type() == JsoJson::Type::OBJECT) {
         const auto& o = JsoJson::cast<JsoJson::valueObject>(v);
-        std::cout << '{' << std::endl;
-        std::cout << '}' << std::endl;
+        std::cout << '{';
+        for (const auto& kv : o->v) {
+            std::cout << "\"" << kv.first << "\":";
+            GetString(kv.second);
+            std::cout << ", ";
+        }
+        std::cout << '}';
     } else if (v->type() == JsoJson::Type::ARRAY) {
         const auto& a = JsoJson::cast<JsoJson::valueArray>(v);
-        std::cout << '[' << std::endl;
+        std::cout << '[';
+        for (const auto& e : a->v) {
+            GetString(e);
+            std::cout << ", ";
+        }
         std::cout << ']' << std::endl;
     }
 }
