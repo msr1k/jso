@@ -1,15 +1,17 @@
-jso: jso.yacc.o jsojson.o
-	clang++ -o jso jsojson.o jso.yacc.o
+jso: obj/jso.yacc.o obj/jsojson.o
+	clang++ -o jso obj/jsojson.o obj/jso.yacc.o
 
-jso.lex.c: jso.l
-	lex -o jso.lex.c jso.l
+obj/jso.lex.c: jso.l
+	lex -o obj/jso.lex.c jso.l
 
-jso.yacc.c: jso.y
-	yacc -o jso.yacc.c jso.y
+obj/jso.yacc.c: jso.y
+	yacc -o obj/jso.yacc.c jso.y
 
-jso.yacc.o: jso.yacc.c jso.lex.c
-	clang -c -o jso.yacc.o jso.yacc.c
+obj/jso.yacc.o: obj/jso.yacc.c obj/jso.lex.c obj/jsojson.h
+	clang -c -o obj/jso.yacc.o obj/jso.yacc.c
 
-jsojson.o: jsojson.cpp
-	clang++ -c -std=c++11 jsojson.cpp
+obj/jsojson.o: jsojson.cpp
+	clang++ -c -std=c++11 -o obj/jsojson.o jsojson.cpp
 
+obj/jsojson.h: jsojson.h
+	cp jsojson.h obj/jsojson.h
