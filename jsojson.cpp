@@ -92,7 +92,7 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
         const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
         std::cout << (b->v ? "true" : "false");
     } else if (v->type() == JsoJson::Type::NUL) {
-        std::cout << "null" << std::endl;
+        std::cout << "null";
     } else if (v->type() == JsoJson::Type::INT) {
         const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
         std::cout << i->v;
@@ -126,7 +126,7 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
             first = false;
             GetString(e);
         }
-        std::cout << ']' << std::endl;
+        std::cout << ']';
     }
 }
 
@@ -178,9 +178,8 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
 {
     JsoJsonBool ret = JSO_JSON_TRUE;
 
-    std::shared_ptr<JsoJson::value> v = h->stack.back();
-    h->stack.pop_back();
-    auto& parent = h->stack.back();
+    auto v = h->stack.back(); h->stack.pop_back();
+    auto parent = h->stack.back();
 
     if (parent->type() == JsoJson::Type::OBJECT) {
         auto o = JsoJson::cast<JsoJson::valueObject>(parent);
