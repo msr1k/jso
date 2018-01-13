@@ -212,6 +212,9 @@ const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
     } else if (h->head->type() == JsoJson::Type::DOUBLE) {
         const auto& v = JsoJson::cast<JsoJson::valueDouble>(h->head);
         std::cout << v->v << std::endl;
+    } else if (h->head->type() == JsoJson::Type::STRING) {
+        const auto& v = JsoJson::cast<JsoJson::valueString>(h->head);
+        std::cout << '"' << v->v << '"' << std::endl;
     }
 
     return "";
