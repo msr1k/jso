@@ -91,6 +91,9 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
     if (v->type() == JsoJson::Type::BOOL) {
         const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
         std::cout << (b->v ? "true" : "false") << std::endl;
+    } else if (v->type() == JsoJson::Type::NUL) {
+        const auto& i = JsoJson::cast<JsoJson::valueNull>(v);
+        std::cout << "null" << std::endl;
     } else if (v->type() == JsoJson::Type::INT) {
         const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
         std::cout << i->v << std::endl;

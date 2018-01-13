@@ -69,7 +69,11 @@ value  : object
          v.v.b = JSO_JSON_FALSE;
          JsoJsonAddValue(h, &v);
        }
-       | NUL
+       | NUL {
+         struct JsoJsonPremitiveValue v;
+         v.type = JSO_JSON_NULL;
+         JsoJsonAddValue(h, &v);
+       }
        ;
 
 bs     : '{' {
