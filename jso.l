@@ -127,7 +127,7 @@ null     { debug_print_itself(yytext); return NUL; };
 
 {strictKey} {
   debug_print_itself(yytext);
-  yylval.string_head = yytext;
+  yylval.key_head = yytext;
   /* yylval.string_head = "dummy"; */
   return KEY;
 }

@@ -2,7 +2,7 @@
 
 cd "`dirname $0`"
 
-echo "[[start jso test]]"
+echo "-- start jso test --"
 
 echo "true must be true"
 echo -n ">> "
@@ -24,6 +24,21 @@ echo -n ">> "
 echo 1 | ../jso
 echo
 
+echo "0b1 must be 1"
+echo -n ">> "
+echo 0b1 | ../jso
+echo
+
+echo "0o7 must be 7"
+echo -n ">> "
+echo 0o7 | ../jso
+echo
+
+echo "0xF must be 15"
+echo -n ">> "
+echo 0xF | ../jso
+echo
+
 echo "1.234 must be 1.234"
 echo -n ">> "
 echo 1.234 | ../jso
@@ -32,4 +47,24 @@ echo
 echo "\"asdf\" must be \"asdf\""
 echo -n ">> "
 echo "\"asdf\"" | ../jso
+echo
+
+echo "{} must be {}"
+echo -n ">> "
+echo "{}" | ../jso
+echo
+
+echo "[] must be []"
+echo -n ">> "
+echo "[]" | ../jso
+echo
+
+echo "[ \"asdf\" ] must be [\"asdf\"]"
+echo -n ">> "
+echo "[ \"asdf\" ]" | ../jso
+echo
+
+echo "{ \"asdf\": 1 } must be {\"asdf\":1}"
+echo -n ">> "
+echo "{ \"asdf\": 1 }" | ../jso
 echo

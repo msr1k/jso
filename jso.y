@@ -94,8 +94,12 @@ pairs  : pairs ',' pair
        | pair
        ;
 
-pair   : STRING ':' value
-       | KEY    ':' value
+pair   : STRING ':' value {
+         JsoJsonAddKey(h, $1);
+       }
+       | KEY    ':' value {
+         JsoJsonAddKey(h, $1);
+       }
        ;
 
 ps     : '[' {
