@@ -42,7 +42,7 @@ value  : object
        | TRUE   {
          struct JsoJsonPremitiveValue v;
          v.type = JSO_JSON_BOOL;
-         v.v.i = 1;
+         v.v.b = JSO_JSON_TRUE;
          JsoJsonAddValue(h, &v);
        }
        | FALSE

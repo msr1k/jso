@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 typedef enum {
-    JSO_JSON_FALSE,
-    JSO_JSON_TRUE,
+    JSO_JSON_FALSE = 0,
+    JSO_JSON_TRUE = 1,
 } JsoJsonBool;
 
 typedef enum {
@@ -21,9 +21,10 @@ typedef enum {
 struct JsoJsonPremitiveValue {
     JsoJsonPremitiveType type;
     union {
-        long int i; // For JSO_JSON_INT and JSO_JSON_BOOL
-        double d;   // For JSO_JSON_DOUBLE
-        char* s;    // FOr JSO_JSON_STRING
+        long int i;    // For JSO_JSON_INT
+        double d;      // For JSO_JSON_DOUBLE
+        char* s;       // For JSO_JSON_STRING
+        JsoJsonBool b; // For JSO_JSON_BOOL
     } v;
 };
 
