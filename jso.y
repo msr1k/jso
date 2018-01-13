@@ -88,6 +88,7 @@ int main()
 {
   h = JsoJsonCreate();
   yyparse();
+  JsoJsonGetJsonString(h);
   JsoJsonDestroy(h);
 }
 

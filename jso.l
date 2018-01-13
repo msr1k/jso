@@ -4,7 +4,7 @@
 
 void eat_comment(void);
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 void debug_print_double(double val)
@@ -35,7 +35,6 @@ void debug_print_char(char val)
 
 %}
 
-%option noyywrap
 %option yylineno
 
 unicode     \\u[0-9A-Fa-f]{4}

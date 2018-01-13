@@ -3,6 +3,8 @@
 #include <map>
 #include <memory>
 
+#include <iostream>
+
 #include "jsojson.h"
 
 namespace JsoJson {
@@ -201,6 +203,11 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
+    if (h->head->type == JsoJson::Type::BOOL) {
+        const auto& b = JsoJson::cast<JsoJson::valueBool>(h->head);
+        std::cout << b->v << std::endl;
+    }
+
     return "";
 }
 
