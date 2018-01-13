@@ -26,48 +26,48 @@ typedef std::map<std::string, std::shared_ptr<value>> object;
 typedef std::vector<std::shared_ptr<value>> array;
 
 struct value {
-    static const Type type = Type::NONE;
+    virtual Type type() { return Type::NONE; }
     virtual ~value() {};
 };
 
 struct valueInt : value {
-    static const Type type = Type::INT;
     long int v;
+    Type type() override { return Type::INT; }
     valueInt(const long int v) : v(v) {}
 };
 
 struct valueDouble : value {
-    static const Type type = Type::DOUBLE;
     double v;
+    Type type() override { return Type::DOUBLE; }
     valueDouble(const double v) : v(v) {}
 };
 
 struct valueString : value {
-    static const Type type = Type::STRING;
     std::string v;
+    Type type() override { return Type::STRING; }
     valueString(const char* v) : v(v) {}
 };
 
 struct valueBool : value {
-    static const Type type = Type::BOOL;
     bool v;
+    Type type() override { return Type::BOOL; }
     valueBool(const bool v) : v(v) {}
 };
 
 struct valueNull : value {
-    static const Type type = Type::NUL;
+    Type type() override { return Type::NUL; }
     valueNull() {}
 };
 
 struct valueObject : value {
-    static const Type type = Type::OBJECT;
     object v;
+    Type type() override { return Type::OBJECT; }
     valueObject() : v() {}
 };
 
 struct valueArray : value {
-    static const Type type = Type::ARRAY;
     array v;
+    Type type() override { return Type::ARRAY; }
     valueArray() : v() {}
 };
 
@@ -111,13 +111,13 @@ JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const struct JsoJsonPremiti
     auto v = JsoJson::CreatePremitiveValue(pv);
     auto latest = h->stack.back();
 
-    if (latest->type == JsoJson::Type::NONE) {
+    if (latest->type() == JsoJson::Type::NONE) {
         // JSON which consists of only one premitive value
         h->head = latest = v;
-    } else if (latest->type == JsoJson::Type::OBJECT) {
+    } else if (latest->type() == JsoJson::Type::OBJECT) {
         // push v to stack which is poped when JsoJsonAddKey called
         h->stack.emplace_back(v);
-    } else if (latest->type == JsoJson::Type::ARRAY) {
+    } else if (latest->type() == JsoJson::Type::ARRAY) {
         // push v to latest array value directry
         auto array = JsoJson::cast<JsoJson::valueArray>(latest);
         if (array) {
@@ -138,7 +138,7 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
     h->stack.pop_back();
     auto parent = h->stack.back();
 
-    if (parent->type == JsoJson::Type::OBJECT) {
+    if (parent->type() == JsoJson::Type::OBJECT) {
         auto o = JsoJson::cast<JsoJson::valueObject>(parent);
         if (o) {
             o->v[k] = v;
@@ -155,11 +155,11 @@ JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
     auto v = std::make_shared<JsoJson::valueArray>();
     auto latest = h->stack.back();
 
-    if (latest->type == JsoJson::Type::NONE) {
+    if (latest->type() == JsoJson::Type::NONE) {
         h->head = latest = v;
-    } else if (latest->type == JsoJson::Type::OBJECT) {
+    } else if (latest->type() == JsoJson::Type::OBJECT) {
         h->stack.emplace_back(v);
-    } else if (latest->type == JsoJson::Type::ARRAY) {
+    } else if (latest->type() == JsoJson::Type::ARRAY) {
         h->stack.emplace_back(v);
         auto array = JsoJson::cast<JsoJson::valueArray>(latest);
         if (array) {
@@ -180,11 +180,11 @@ JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h)
     auto v = std::make_shared<JsoJson::valueObject>();
     auto latest = h->stack.back();
 
-    if (latest->type == JsoJson::Type::NONE) {
+    if (latest->type() == JsoJson::Type::NONE) {
         h->head = latest = v;
-    } else if (latest->type == JsoJson::Type::OBJECT) {
+    } else if (latest->type() == JsoJson::Type::OBJECT) {
         h->stack.emplace_back(v);
-    } else if (latest->type == JsoJson::Type::ARRAY) {
+    } else if (latest->type() == JsoJson::Type::ARRAY) {
         h->stack.emplace_back(v);
         auto array = JsoJson::cast<JsoJson::valueArray>(latest);
         if (array) {
@@ -203,9 +203,9 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
-    if (h->head->type == JsoJson::Type::BOOL) {
+    if (h->head->type() == JsoJson::Type::BOOL) {
         const auto& b = JsoJson::cast<JsoJson::valueBool>(h->head);
-        std::cout << b->v << std::endl;
+        std::cout << (b->v ? "true" : "false") << std::endl;
     }
 
     return "";
