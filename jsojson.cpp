@@ -104,20 +104,28 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
         const auto& s = JsoJson::cast<JsoJson::valueString>(v);
         std::cout << '"' << s->v << '"';
     } else if (v->type() == JsoJson::Type::OBJECT) {
+        bool first = true;
         const auto& o = JsoJson::cast<JsoJson::valueObject>(v);
         std::cout << '{';
         for (const auto& kv : o->v) {
+            if (!first) {
+                std::cout << ", ";
+            }
+            first = false;
             std::cout << "\"" << kv.first << "\":";
             GetString(kv.second);
-            std::cout << ", ";
         }
         std::cout << '}';
     } else if (v->type() == JsoJson::Type::ARRAY) {
+        bool first = true;
         const auto& a = JsoJson::cast<JsoJson::valueArray>(v);
         std::cout << '[';
         for (const auto& e : a->v) {
+            if (!first) {
+                std::cout << ", ";
+            }
+            first = false;
             GetString(e);
-            std::cout << ", ";
         }
         std::cout << ']' << std::endl;
     }

@@ -73,3 +73,8 @@ echo "{ \"asdf\": 1 } must be {\"asdf\":1}"
 echo -n ">> "
 echo "{ \"asdf\": 1 }" | ../jso
 echo
+
+echo "{ \"asdf\": 1, qwer: 2.3 } must be {\"asdf\":1, "qwer": 2.3}"
+echo -n ">> "
+echo "{ \"asdf\": 1, qwer: 2.3}" | ../jso
+echo
