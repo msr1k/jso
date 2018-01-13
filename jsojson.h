@@ -5,18 +5,18 @@
 extern "C" {
 #endif
 
-enum JsoJsonBool {
+typedef enum {
     JSO_JSON_FALSE,
     JSO_JSON_TRUE,
-};
+} JsoJsonBool;
 
-enum JsoJsonPremitiveType {
+typedef enum {
     JSO_JSON_INT,  // JSON does not this type, but added for internal convenience
     JSO_JSON_DOUBLE,
     JSO_JSON_STRING,
     JSO_JSON_BOOL,
     JSO_JSON_NULL,
-};
+} JsoJsonPremitiveType;
 
 struct JsoJsonPremitiveValue {
     JsoJsonPremitiveType type;
@@ -32,7 +32,7 @@ struct JsoJsonHandle;
 struct JsoJsonHandle* JsoJsonCreate();
 void JsoJsonDestroy(struct JsoJsonHandle* h);
 
-JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonPremitiveValue* v);
+JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const struct JsoJsonPremitiveValue* v);
 JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k);
 
 JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h);

@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 
-#include "json.h"
+#include "jsojson.h"
 
 namespace JsoJson {
 
@@ -102,7 +102,7 @@ void JsoJsonDestroy(struct JsoJsonHandle* h)
     delete h;
 }
 
-JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const JsoJsonPremitiveValue* pv)
+JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const struct JsoJsonPremitiveValue* pv)
 {
     JsoJsonBool ret = JSO_JSON_TRUE;
 

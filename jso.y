@@ -4,6 +4,9 @@
 #define YYERROR_VERBOSE 1
 
 #include <stdio.h>
+#include "jsojson.h"
+
+static struct JsoJsonHandle* h;
 
 static void yyerror(const char *s)
 {
@@ -36,7 +39,12 @@ value  : object
        | array
        | STRING
        | DOUBLE
-       | TRUE
+       | TRUE   {
+         struct JsoJsonPremitiveValue v;
+         v.type = JSO_JSON_BOOL;
+         v.v.i = 1;
+         JsoJsonAddValue(h, &v);
+       }
        | FALSE
        | NUL
        ;
@@ -78,6 +86,8 @@ values : values ',' value
 
 int main()
 {
+  h = JsoJsonCreate();
   yyparse();
+  JsoJsonDestroy(h);
 }
 
