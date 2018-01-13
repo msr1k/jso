@@ -72,9 +72,13 @@ value  : object
        | NUL
        ;
 
-bs     : '{' {}
+bs     : '{' {
+         JsoJsonEnterObject(h);
+       }
        ;
-be     : '}' {}
+be     : '}' {
+         JsoJsonLeaveObject(h);
+       }
        ;
 
 object : bs be
@@ -90,9 +94,13 @@ pair   : STRING ':' value
        | KEY    ':' value
        ;
 
-ps     : '[' {}
+ps     : '[' {
+         JsoJsonEnterArray(h);
+       }
        ;
-pe     : ']' {}
+pe     : ']' {
+         JsoJsonLeaveArray(h);
+       }
        ;
 
 array  : ps pe

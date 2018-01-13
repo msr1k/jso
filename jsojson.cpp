@@ -26,48 +26,48 @@ typedef std::map<std::string, std::shared_ptr<value>> object;
 typedef std::vector<std::shared_ptr<value>> array;
 
 struct value {
-    virtual Type type() { return Type::NONE; }
+    virtual Type type() const { return Type::NONE; }
     virtual ~value() {};
 };
 
 struct valueInt : value {
     long int v;
-    Type type() override { return Type::INT; }
+    Type type() const override { return Type::INT; }
     valueInt(const long int v) : v(v) {}
 };
 
 struct valueDouble : value {
     double v;
-    Type type() override { return Type::DOUBLE; }
+    Type type() const override { return Type::DOUBLE; }
     valueDouble(const double v) : v(v) {}
 };
 
 struct valueString : value {
     std::string v;
-    Type type() override { return Type::STRING; }
+    Type type() const override { return Type::STRING; }
     valueString(const char* v) : v(v) {}
 };
 
 struct valueBool : value {
     bool v;
-    Type type() override { return Type::BOOL; }
+    Type type() const override { return Type::BOOL; }
     valueBool(const bool v) : v(v) {}
 };
 
 struct valueNull : value {
-    Type type() override { return Type::NUL; }
+    Type type() const override { return Type::NUL; }
     valueNull() {}
 };
 
 struct valueObject : value {
     object v;
-    Type type() override { return Type::OBJECT; }
+    Type type() const override { return Type::OBJECT; }
     valueObject() : v() {}
 };
 
 struct valueArray : value {
     array v;
-    Type type() override { return Type::ARRAY; }
+    Type type() const override { return Type::ARRAY; }
     valueArray() : v() {}
 };
 
@@ -84,6 +84,31 @@ std::shared_ptr<value> CreatePremitiveValue(const JsoJsonPremitiveValue* pv) {
 
 template <class T> auto cast(const std::shared_ptr<value> v) -> std::shared_ptr<T> {
     return std::dynamic_pointer_cast<T>(v);
+}
+
+static void GetString(std::shared_ptr<JsoJson::value> v)
+{
+    if (v->type() == JsoJson::Type::BOOL) {
+        const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
+        std::cout << (b->v ? "true" : "false") << std::endl;
+    } else if (v->type() == JsoJson::Type::INT) {
+        const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
+        std::cout << i->v << std::endl;
+    } else if (v->type() == JsoJson::Type::DOUBLE) {
+        const auto& d = JsoJson::cast<JsoJson::valueDouble>(v);
+        std::cout << d->v << std::endl;
+    } else if (v->type() == JsoJson::Type::STRING) {
+        const auto& s = JsoJson::cast<JsoJson::valueString>(v);
+        std::cout << '"' << s->v << '"' << std::endl;
+    } else if (v->type() == JsoJson::Type::OBJECT) {
+        const auto& o = JsoJson::cast<JsoJson::valueObject>(v);
+        std::cout << '{' << std::endl;
+        std::cout << '}' << std::endl;
+    } else if (v->type() == JsoJson::Type::ARRAY) {
+        const auto& a = JsoJson::cast<JsoJson::valueArray>(v);
+        std::cout << '[' << std::endl;
+        std::cout << ']' << std::endl;
+    }
 }
 
 } // namespace JsoJson
@@ -203,20 +228,7 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
-    if (h->head->type() == JsoJson::Type::BOOL) {
-        const auto& v = JsoJson::cast<JsoJson::valueBool>(h->head);
-        std::cout << (v->v ? "true" : "false") << std::endl;
-    } else if (h->head->type() == JsoJson::Type::INT) {
-        const auto& v = JsoJson::cast<JsoJson::valueInt>(h->head);
-        std::cout << v->v << std::endl;
-    } else if (h->head->type() == JsoJson::Type::DOUBLE) {
-        const auto& v = JsoJson::cast<JsoJson::valueDouble>(h->head);
-        std::cout << v->v << std::endl;
-    } else if (h->head->type() == JsoJson::Type::STRING) {
-        const auto& v = JsoJson::cast<JsoJson::valueString>(h->head);
-        std::cout << '"' << v->v << '"' << std::endl;
-    }
-
+    JsoJson::GetString(h->head);
     return "";
 }
 
