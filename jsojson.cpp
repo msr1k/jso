@@ -219,7 +219,11 @@ JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
 
 JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h)
 {
-    h->stack.pop_back();
+    int l = h->stack.size();
+    if (l > 2 && h->stack[l-2]->type() != JsoJson::Type::OBJECT) {
+        h->stack.pop_back();
+    }
+
     return JSO_JSON_TRUE;
 }
 
@@ -245,7 +249,11 @@ JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h)
 
 JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 {
-    h->stack.pop_back();
+    int l = h->stack.size();
+    if (l > 2 && h->stack[l-2]->type() != JsoJson::Type::OBJECT) {
+        h->stack.pop_back();
+    }
+
     return JSO_JSON_TRUE;
 }
 
@@ -253,6 +261,7 @@ const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
     JsoJson::GetString(h->head);
+    std::cout << std::endl;
     return "";
 }
 
