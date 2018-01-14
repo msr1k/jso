@@ -33,13 +33,28 @@ Current status
 --------------
 
 For the time being, this program can convert JSO formatted string into JSON.
+
+### Build
+
 You can build this program by following command if you use macOS or has clang.
+
+macOS
 
     $ make
 
-Then you can use like this.
+Windows MinGW
+
+    > make -f make_mingw.mak
+
+### Usage
+
+On macOS, Linux
 
     $ cat jso_file | ./jso > json_file
+
+On Windows
+
+    > type jso_file | ./jso > json_file
 
 Details
 -------
