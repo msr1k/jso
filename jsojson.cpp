@@ -193,6 +193,16 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
     return ret;
 }
 
+JsoJsonBool JsoJsonAddKey2(struct JsoJsonHandle* h, const char* k)
+{
+    std::string key(k);
+    std::string::size_type pos = key.find(":");
+    if (pos != std::string::npos) {
+        key = key.substr(0, pos);
+    }
+    return JsoJsonAddKey(h, key.c_str());
+}
+
 JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h)
 {
     JsoJsonBool ret = JSO_JSON_TRUE;

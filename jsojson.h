@@ -35,6 +35,7 @@ void JsoJsonDestroy(struct JsoJsonHandle* h);
 
 JsoJsonBool JsoJsonAddValue(struct JsoJsonHandle* h, const struct JsoJsonPremitiveValue* v);
 JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k);
+JsoJsonBool JsoJsonAddKey2(struct JsoJsonHandle* h, const char* k);  // workaround of KEY token string incorrectness
 
 JsoJsonBool JsoJsonEnterArray(struct JsoJsonHandle* h);
 JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h);

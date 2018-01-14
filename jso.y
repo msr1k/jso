@@ -98,7 +98,7 @@ pair   : STRING ':' value {
          JsoJsonAddKey(h, $1);
        }
        | KEY    ':' value {
-         JsoJsonAddKey(h, $1);
+         JsoJsonAddKey2(h, $1);
        }
        ;
 
