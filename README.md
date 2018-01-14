@@ -9,6 +9,12 @@ This is JavaScript object like data format.
 Supported data type is just same as JSON.
 But JSO notation, against JSON, is almost same as JavaScript.
 
+Dependency
+----------
+
+- flex (lexical analyzer)
+- bison (grammatival analyzer)
+
 Purpose
 -------
 
@@ -22,6 +28,18 @@ Purpose
 Since this format gives writer various way of writing and it can also include meta information as comment, this is impure data format.
 
 For example, saving after loading JSO file by some program, in the future, may loose some kind of information, comment or format of number or something.
+
+Current status
+--------------
+
+For the time being, this program can convert JSO formatted string into JSON.
+You can build this program by following command if you use macOS or has clang.
+
+    $ make
+
+Then you can use like this.
+
+    $ cat jso_file | ./jso > json_file
 
 Details
 -------
@@ -85,11 +103,6 @@ Unlike JSON, JSO allows following notations.
      "b": 2,
    }
 ```
-
-Conditions
-----------
-
-Developping lexcal and grammatical analyzer currently.
 
 LICENSE
 -------
