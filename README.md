@@ -40,7 +40,11 @@ You can build this program by following command if you use macOS or has clang.
 
 macOS
 
-    $ make
+    $ make -f make_mac.mak
+
+Linux
+
+    $ make -f make_linux.mak
 
 Windows MinGW
 
