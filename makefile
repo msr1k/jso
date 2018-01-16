@@ -15,3 +15,8 @@ obj/jsojson.o: jsojson.cpp
 
 obj/jsojson.h: jsojson.h
 	cp jsojson.h obj/jsojson.h
+
+clean:
+	rm -f obj/* jso
+
+all: clean jso

@@ -1,4 +1,4 @@
-jso: obj/jso.yacc.o obj/jsojson.o
+jso.exe: obj/jso.yacc.o obj/jsojson.o
 	g++ -o jso obj/jsojson.o obj/jso.yacc.o
 
 obj/jso.lex.c: jso.l
@@ -15,3 +15,8 @@ obj/jsojson.o: jsojson.cpp
 
 obj/jsojson.h: jsojson.h
 	cp jsojson.h obj/jsojson.h
+
+clean:
+	rm -f obj/* jso.exe
+
+all: clean jso.exe
