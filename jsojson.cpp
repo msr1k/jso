@@ -86,25 +86,25 @@ template <class T> auto cast(const std::shared_ptr<value> v) -> std::shared_ptr<
     return std::dynamic_pointer_cast<T>(v);
 }
 
-static void GetString(std::shared_ptr<JsoJson::value> v)
+static void GetString(std::shared_ptr<value> v)
 {
-    if (v->type() == JsoJson::Type::BOOL) {
-        const auto& b = JsoJson::cast<JsoJson::valueBool>(v);
+    if (v->type() == Type::BOOL) {
+        const auto& b = cast<valueBool>(v);
         std::cout << (b->v ? "true" : "false");
-    } else if (v->type() == JsoJson::Type::NUL) {
+    } else if (v->type() == Type::NUL) {
         std::cout << "null";
-    } else if (v->type() == JsoJson::Type::INT) {
-        const auto& i = JsoJson::cast<JsoJson::valueInt>(v);
+    } else if (v->type() == Type::INT) {
+        const auto& i = cast<valueInt>(v);
         std::cout << i->v;
-    } else if (v->type() == JsoJson::Type::DOUBLE) {
-        const auto& d = JsoJson::cast<JsoJson::valueDouble>(v);
+    } else if (v->type() == Type::DOUBLE) {
+        const auto& d = cast<valueDouble>(v);
         std::cout << d->v;
-    } else if (v->type() == JsoJson::Type::STRING) {
-        const auto& s = JsoJson::cast<JsoJson::valueString>(v);
+    } else if (v->type() == Type::STRING) {
+        const auto& s = cast<valueString>(v);
         std::cout << '"' << s->v << '"';
-    } else if (v->type() == JsoJson::Type::OBJECT) {
+    } else if (v->type() == Type::OBJECT) {
         bool first = true;
-        const auto& o = JsoJson::cast<JsoJson::valueObject>(v);
+        const auto& o = cast<valueObject>(v);
         std::cout << '{';
         for (const auto& kv : o->v) {
             if (!first) {
@@ -115,9 +115,9 @@ static void GetString(std::shared_ptr<JsoJson::value> v)
             GetString(kv.second);
         }
         std::cout << '}';
-    } else if (v->type() == JsoJson::Type::ARRAY) {
+    } else if (v->type() == Type::ARRAY) {
         bool first = true;
-        const auto& a = JsoJson::cast<JsoJson::valueArray>(v);
+        const auto& a = cast<valueArray>(v);
         std::cout << '[';
         for (const auto& e : a->v) {
             if (!first) {
