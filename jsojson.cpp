@@ -87,13 +87,27 @@ template <class T> auto cast(const std::shared_ptr<value> v) -> std::shared_ptr<
 }
 
 struct FormatOptions {
-    const char* spacer;
+    const char* space_after_comma;
+    const char* space_key_value;
     const char* delimiter;
     unsigned int indent_spaces;
 };
 
-static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int indent_level = 0)
+static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int indent_level = 0, bool enable_indent = true)
 {
+    std::string indent = "";
+    for (int i = 0; i < f->indent_spaces * indent_level; ++i) {
+        indent += " ";
+    }
+    if (enable_indent) {
+        std::cout << indent;
+    }
+
+    std::string indent_oa = indent;  // for each object or array element
+    for (int i = 0; i < f->indent_spaces; ++i) {
+        indent_oa += " ";
+    }
+
     if (v->type() == Type::BOOL) {
         const auto& b = cast<valueBool>(v);
         std::cout << (b->v ? "true" : "false");
@@ -117,15 +131,23 @@ static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int i
         bool first = true;
         const auto& o = cast<valueObject>(v);
         std::cout << '{' << f->delimiter;
+        if (o->v.size() > 0) {
+            std::cout << indent_oa;
+        }
         for (const auto& kv : o->v) {
             if (!first) {
-                std::cout << "," << f->spacer << f->delimiter;
+                std::cout << "," << f->space_after_comma << f->delimiter;
+                std::cout << indent_oa;
             }
             first = false;
-            std::cout << "\"" << kv.first << "\":";
-            GetString(kv.second, f, indent_level + 1);
+            std::cout << "\"" << kv.first << "\":" << f->space_key_value;
+            GetString(kv.second, f, indent_level + 1, false);
         }
-        std::cout << f->delimiter << '}';
+        if (o->v.size() > 0) {
+            std::cout << f->delimiter << indent << '}';
+        } else {
+            std::cout << indent << '}';
+        }
         if (indent_level == 0) {
             std::cout << f->delimiter;
         }
@@ -134,14 +156,22 @@ static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int i
         bool first = true;
         const auto& a = cast<valueArray>(v);
         std::cout << '[' << f->delimiter;
+        if (a->v.size() > 0) {
+            std::cout << indent_oa;
+        }
         for (const auto& e : a->v) {
             if (!first) {
-                std::cout << "," << f->spacer << f->delimiter;
+                std::cout << "," << f->space_after_comma << f->delimiter;
+                std::cout << indent_oa;
             }
             first = false;
-            GetString(e, f, indent_level + 1);
+            GetString(e, f, indent_level + 1, false);
         }
-        std::cout << f->delimiter << ']';
+        if (a->v.size() > 0) {
+            std::cout << f->delimiter << indent << ']';
+        } else {
+            std::cout << indent << ']';
+        }
         if (indent_level == 0) {
             std::cout << f->delimiter;
         }
@@ -288,13 +318,16 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
+
     JsoJson::FormatOptions f;
-    f.spacer = "";
+    f.space_after_comma = "";
+    f.space_key_value = " ";
     f.delimiter = "\n";
     f.indent_spaces = 2;
 
     // JsoJson::FormatOptions f;
-    // f.spacer = " ";
+    // f.space_after_comma = " ";
+    // f.space_key_value = " ";
     // f.delimiter = "";
     // f.indent_spaces = 0;
 

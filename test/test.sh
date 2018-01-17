@@ -98,3 +98,19 @@ echo '{ "asdf": { "a": 2.3, "b": -987, }, } must be ...'
 echo -n ">> "
 echo '{"asdf": { "a": 2.3, "b": -987,}, }' | ../jso
 echo
+
+echo '{ "a": { "b": { "c": { "d": 1 } } } } must be...'
+echo -n ">> "
+echo '{ "a": { "b": { "c": { "d": 1 } } } }' | ../jso
+
+echo '{ "a": { "b": { "c": { "d": 1 }, "e": {} } } } must be...'
+echo -n ">> "
+echo '{ "a": { "b": { "c": { "d": 1 }, "e": {} } } }' | ../jso
+
+echo '{ a: { b: { c: { d: 1 }, e: {} } } } must be...'
+echo -n ">> "
+echo '{ a: { b: { c: { d: 1 }, e: {} } } }' | ../jso
+
+echo '[[[[[1]]],[]]] must be...'
+echo -n ">> "
+echo '[[[[[1]]],[]]]' | ../jso
