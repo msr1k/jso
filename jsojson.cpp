@@ -86,47 +86,65 @@ template <class T> auto cast(const std::shared_ptr<value> v) -> std::shared_ptr<
     return std::dynamic_pointer_cast<T>(v);
 }
 
-static void GetString(std::shared_ptr<value> v)
+struct FormatOptions {
+    const char* spacer;
+    const char* delimiter;
+    unsigned int indent_spaces;
+};
+
+static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int indent_level = 0)
 {
     if (v->type() == Type::BOOL) {
         const auto& b = cast<valueBool>(v);
         std::cout << (b->v ? "true" : "false");
+
     } else if (v->type() == Type::NUL) {
         std::cout << "null";
+
     } else if (v->type() == Type::INT) {
         const auto& i = cast<valueInt>(v);
         std::cout << i->v;
+
     } else if (v->type() == Type::DOUBLE) {
         const auto& d = cast<valueDouble>(v);
         std::cout << d->v;
+
     } else if (v->type() == Type::STRING) {
         const auto& s = cast<valueString>(v);
         std::cout << '"' << s->v << '"';
+
     } else if (v->type() == Type::OBJECT) {
         bool first = true;
         const auto& o = cast<valueObject>(v);
-        std::cout << '{';
+        std::cout << '{' << f->delimiter;
         for (const auto& kv : o->v) {
             if (!first) {
-                std::cout << ", ";
+                std::cout << "," << f->spacer << f->delimiter;
             }
             first = false;
             std::cout << "\"" << kv.first << "\":";
-            GetString(kv.second);
+            GetString(kv.second, f, indent_level + 1);
         }
-        std::cout << '}';
+        std::cout << f->delimiter << '}';
+        if (indent_level == 0) {
+            std::cout << f->delimiter;
+        }
+
     } else if (v->type() == Type::ARRAY) {
         bool first = true;
         const auto& a = cast<valueArray>(v);
-        std::cout << '[';
+        std::cout << '[' << f->delimiter;
         for (const auto& e : a->v) {
             if (!first) {
-                std::cout << ", ";
+                std::cout << "," << f->spacer << f->delimiter;
             }
             first = false;
-            GetString(e);
+            GetString(e, f, indent_level + 1);
         }
-        std::cout << ']';
+        std::cout << f->delimiter << ']';
+        if (indent_level == 0) {
+            std::cout << f->delimiter;
+        }
     }
 }
 
@@ -270,7 +288,17 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
 const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
 {
     // TODO
-    JsoJson::GetString(h->head);
+    JsoJson::FormatOptions f;
+    f.spacer = "";
+    f.delimiter = "\n";
+    f.indent_spaces = 2;
+
+    // JsoJson::FormatOptions f;
+    // f.spacer = " ";
+    // f.delimiter = "";
+    // f.indent_spaces = 0;
+
+    JsoJson::GetString(h->head, &f, 0);
     std::cout << std::endl;
     return "";
 }
