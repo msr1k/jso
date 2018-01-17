@@ -86,47 +86,95 @@ template <class T> auto cast(const std::shared_ptr<value> v) -> std::shared_ptr<
     return std::dynamic_pointer_cast<T>(v);
 }
 
-static void GetString(std::shared_ptr<value> v)
+struct FormatOptions {
+    const char* space_after_comma;
+    const char* space_key_value;
+    const char* delimiter;
+    unsigned int indent_spaces;
+};
+
+static void GetString(std::shared_ptr<value> v, FormatOptions* f, unsigned int indent_level = 0, bool enable_indent = true)
 {
+    std::string indent = "";
+    for (int i = 0; i < f->indent_spaces * indent_level; ++i) {
+        indent += " ";
+    }
+    if (enable_indent) {
+        std::cout << indent;
+    }
+
+    std::string indent_oa = indent;  // for each object or array element
+    for (int i = 0; i < f->indent_spaces; ++i) {
+        indent_oa += " ";
+    }
+
     if (v->type() == Type::BOOL) {
         const auto& b = cast<valueBool>(v);
         std::cout << (b->v ? "true" : "false");
+
     } else if (v->type() == Type::NUL) {
         std::cout << "null";
+
     } else if (v->type() == Type::INT) {
         const auto& i = cast<valueInt>(v);
         std::cout << i->v;
+
     } else if (v->type() == Type::DOUBLE) {
         const auto& d = cast<valueDouble>(v);
         std::cout << d->v;
+
     } else if (v->type() == Type::STRING) {
         const auto& s = cast<valueString>(v);
         std::cout << '"' << s->v << '"';
+
     } else if (v->type() == Type::OBJECT) {
         bool first = true;
         const auto& o = cast<valueObject>(v);
-        std::cout << '{';
+        std::cout << '{' << f->delimiter;
+        if (o->v.size() > 0) {
+            std::cout << indent_oa;
+        }
         for (const auto& kv : o->v) {
             if (!first) {
-                std::cout << ", ";
+                std::cout << "," << f->space_after_comma << f->delimiter;
+                std::cout << indent_oa;
             }
             first = false;
-            std::cout << "\"" << kv.first << "\":";
-            GetString(kv.second);
+            std::cout << "\"" << kv.first << "\":" << f->space_key_value;
+            GetString(kv.second, f, indent_level + 1, false);
         }
-        std::cout << '}';
+        if (o->v.size() > 0) {
+            std::cout << f->delimiter << indent << '}';
+        } else {
+            std::cout << indent << '}';
+        }
+        if (indent_level == 0) {
+            std::cout << f->delimiter;
+        }
+
     } else if (v->type() == Type::ARRAY) {
         bool first = true;
         const auto& a = cast<valueArray>(v);
-        std::cout << '[';
+        std::cout << '[' << f->delimiter;
+        if (a->v.size() > 0) {
+            std::cout << indent_oa;
+        }
         for (const auto& e : a->v) {
             if (!first) {
-                std::cout << ", ";
+                std::cout << "," << f->space_after_comma << f->delimiter;
+                std::cout << indent_oa;
             }
             first = false;
-            GetString(e);
+            GetString(e, f, indent_level + 1, false);
         }
-        std::cout << ']';
+        if (a->v.size() > 0) {
+            std::cout << f->delimiter << indent << ']';
+        } else {
+            std::cout << indent << ']';
+        }
+        if (indent_level == 0) {
+            std::cout << f->delimiter;
+        }
     }
 }
 
@@ -267,10 +315,25 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
     return JSO_JSON_TRUE;
 }
 
-const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
+const char * JsoJsonGetJsonString(struct JsoJsonHandle* h, int pretty_format)
 {
     // TODO
-    JsoJson::GetString(h->head);
+
+    JsoJson::FormatOptions f;
+
+    if (pretty_format) {
+        f.space_after_comma = "";
+        f.space_key_value = " ";
+        f.delimiter = "\n";
+        f.indent_spaces = 2;
+    } else {
+        f.space_after_comma = " ";
+        f.space_key_value = " ";
+        f.delimiter = "";
+        f.indent_spaces = 0;
+    }
+
+    JsoJson::GetString(h->head, &f, 0);
     std::cout << std::endl;
     return "";
 }

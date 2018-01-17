@@ -56,6 +56,12 @@ On Windows
 
     > type jso_file | ./jso > json_file
 
+### Options
+
+- `-p`: Pretty format Enable
+
+        $ cat jso_file | ./jso -p > json_file
+
 Details
 -------
 
