@@ -42,7 +42,7 @@ JsoJsonBool JsoJsonLeaveArray(struct JsoJsonHandle* h);
 JsoJsonBool JsoJsonEnterObject(struct JsoJsonHandle* h);
 JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h);
 
-const char* JsoJsonGetJsonString(struct JsoJsonHandle* h);
+const char* JsoJsonGetJsonString(struct JsoJsonHandle* h, int pretty_format);
 
 #ifdef __cplusplus
 }

@@ -123,11 +123,17 @@ values : values ',' value
 
 #include "jso.lex.c"
 
-int main()
+int main(int argc, char const* argv[])
 {
+  int pretty_format = 0;
+  if (argc >= 2) {
+    if ( strcmp(argv[1], "-p") == 0 ) {
+      pretty_format = 1;
+    }
+  }
   h = JsoJsonCreate();
   yyparse();
-  JsoJsonGetJsonString(h);
+  JsoJsonGetJsonString(h, pretty_format);
   JsoJsonDestroy(h);
 }
 

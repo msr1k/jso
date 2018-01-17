@@ -315,21 +315,23 @@ JsoJsonBool JsoJsonLeaveObject(struct JsoJsonHandle* h)
     return JSO_JSON_TRUE;
 }
 
-const char * JsoJsonGetJsonString(struct JsoJsonHandle* h)
+const char * JsoJsonGetJsonString(struct JsoJsonHandle* h, int pretty_format)
 {
     // TODO
 
     JsoJson::FormatOptions f;
-    f.space_after_comma = "";
-    f.space_key_value = " ";
-    f.delimiter = "\n";
-    f.indent_spaces = 2;
 
-    // JsoJson::FormatOptions f;
-    // f.space_after_comma = " ";
-    // f.space_key_value = " ";
-    // f.delimiter = "";
-    // f.indent_spaces = 0;
+    if (pretty_format) {
+        f.space_after_comma = "";
+        f.space_key_value = " ";
+        f.delimiter = "\n";
+        f.indent_spaces = 2;
+    } else {
+        f.space_after_comma = " ";
+        f.space_key_value = " ";
+        f.delimiter = "";
+        f.indent_spaces = 0;
+    }
 
     JsoJson::GetString(h->head, &f, 0);
     std::cout << std::endl;
