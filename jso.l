@@ -54,7 +54,7 @@ binary      0(b|B)[0-1]+
 white       ' \t\n'
 marks       '\"\'\\\[\]{},\.:;!#\$%&\(\)\-=~^\|`@\*\+_\?><'
 extendedKey ([0-9]+|([^{marks}{white}]|{unicode}|{latin18}|{latin116})+)
-strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]+)
+strictKey   ([0-9]+|[_a-zA-Z][_0-9a-zA-Z]*)
 
 %%
 "/*"       {

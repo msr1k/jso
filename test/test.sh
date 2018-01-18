@@ -134,3 +134,8 @@ echo '[[[[[1]]],[]]]' | ../jso -p
 echo 'testee/jso_wrong_lexical_error.jso must be...'
 echo -n ">> "
 cat testee/jso_wrong_lexical_error.jso | ../jso
+
+echo '{ a   :   5 }  must be...'
+echo -n ">> "
+echo '{ a   :   5 }' | ../jso -p
+
