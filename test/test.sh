@@ -130,3 +130,12 @@ echo '{ a: { b: { c: { d: 1 }, e: {} } } }' | ../jso -p
 echo '[[[[[1]]],[]]] must be...'
 echo -n ">> "
 echo '[[[[[1]]],[]]]' | ../jso -p
+
+echo 'testee/jso_wrong_lexical_error.jso must be...'
+echo -n ">> "
+cat testee/jso_wrong_lexical_error.jso | ../jso
+
+echo '{ a   :   5 }  must be...'
+echo -n ">> "
+echo '{ a   :   5 }' | ../jso -p
+

@@ -248,6 +248,10 @@ JsoJsonBool JsoJsonAddKey2(struct JsoJsonHandle* h, const char* k)
     if (pos != std::string::npos) {
         key = key.substr(0, pos);
     }
+    pos = key.find(" ");
+    if (pos != std::string::npos) {
+        key = key.substr(0, pos);
+    }
     return JsoJsonAddKey(h, key.c_str());
 }
 
