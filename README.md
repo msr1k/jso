@@ -36,13 +36,23 @@ For the time being, this program can convert JSO formatted string into JSON.
 
 ### Build
 
-You can build this program by following command if you use macOS or has clang.
-
-macOS
+You can build this program by following command
 
     $ make
 
-Windows MinGW
+On Windows, MinGW environment is supposed.
+
+#### Another way of build (obsolete)
+
+macOS (Use clang, clang++)
+
+    $ make -f make_mac.mak
+
+Linux (Use gcc, g++)
+
+    $ make -f make_linux.mak
+
+Windows MinGW (Use gcc, g++)
 
     > make -f make_mingw.mak
 
