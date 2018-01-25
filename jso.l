@@ -37,6 +37,7 @@ void debug_print_char(char val)
 
 %option yylineno
 
+utf8bom     \xEF\xBB\xBF
 unicode     \\u[0-9A-Fa-f]{4}
 latin116    \\x[0-9A-Fa-f]{2}
 latin18     \\[0-7]{1,3}
@@ -135,6 +136,10 @@ null     { debug_print_itself(yytext); return NUL; };
 
 [\[\]{},:]  { debug_print_char(yytext[0]); return yytext[0]; };
 [ \t\n]     { debug_print_char(yytext[0]); };
+
+{utf8bom} {
+  return UTF8BOM;
+}
 
 . {
   fprintf(stderr, "lexical error (line %d)\n", yylineno);
