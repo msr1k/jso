@@ -1,0 +1,18 @@
+﻿{
+  "asdf"   : "qwer",
+  'asdf'   : "qwer",
+  "asdf"   : 'qwer',
+  'asdf'   : 'qwer',
+  "array"  : [ 0.1, 0.1e+5, 0o1, 01, 0b1, 0O007, 0B0101, 12345, -1, -1.234, true, false, "zxcv", ],
+  "object" : { "1": 0x0F, "true": true, "false": false, "zxcv": "zxcv", },
+  "true"   : true,
+  "false"  : false, // this is inline comment
+  "null"   : null,
+  key      : "key",
+/*
+  this is block comment
+  "array"  : [ 0.1, 0.1e+5, 0o1, 01, 0b1, 0O007, 0B0101, 12345, -1, -1.234, true, false, "zxcv", ],
+  "object" : { "1": 0x0F, "true": true, "false": false, "zxcv": "zxcv", },
+*/
+}
+

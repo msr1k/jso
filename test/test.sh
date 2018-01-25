@@ -139,3 +139,7 @@ echo '{ a   :   5 }  must be...'
 echo -n ">> "
 echo '{ a   :   5 }' | ../jso -p
 
+echo 'testee/jso_utf8bom.jso must be...'
+echo -n ">> "
+cat testee/jso_utf8bom.jso | ../jso
+
