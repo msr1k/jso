@@ -31,10 +31,11 @@ static int yywrap(void)
 %token <string_head>  STRING
 %token <double_value> DOUBLE
 %token <int_value>    INT
-%token TRUE FALSE NUL
+%token TRUE FALSE NUL UTF8BOM
 
 %%
 jso    : value
+       | UTF8BOM value
        ;
 
 value  : object
