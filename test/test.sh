@@ -143,3 +143,7 @@ echo 'testee/jso_utf8bom.jso must be...'
 echo -n ">> "
 cat testee/jso_utf8bom.jso | ../jso
 
+echo '{ a: 1, d: 2, c: 3, b: 4 } must be...'
+echo -n ">> "
+echo '{ a: 1, d: 2, c: 3, b: 4 }' | ../jso -p
+
