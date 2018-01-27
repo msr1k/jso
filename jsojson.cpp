@@ -1,6 +1,5 @@
 #include <string>
 #include <vector>
-#include <map>
 #include <memory>
 
 #include <iostream>
@@ -22,7 +21,8 @@ enum class Type {
 	ARRAY,
 };
 
-typedef std::map<std::string, std::shared_ptr<value>> object;
+typedef std::pair<std::string, std::shared_ptr<value>> key_value;
+typedef std::vector<key_value> object;
 typedef std::vector<std::shared_ptr<value>> array;
 
 struct value {
@@ -232,7 +232,7 @@ JsoJsonBool JsoJsonAddKey(struct JsoJsonHandle* h, const char* k)
     if (parent->type() == JsoJson::Type::OBJECT) {
         auto o = JsoJson::cast<JsoJson::valueObject>(parent);
         if (o) {
-            o->v[k] = v;
+            o->v.emplace_back(std::make_pair(std::string(k), v));
         }
     } else {
         ret = JSO_JSON_FALSE;
